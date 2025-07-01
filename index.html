@@ -3,589 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Forecast</title>
-    <script src="https://cdn.tailwindcss.com "></script>
+    <title>WeatherOS - Advanced Weather Forecast</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --neon-blue: #0ff0fc;
-            --neon-purple: #7a04eb;
-            --neon-pink: #fe00fe;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.2);
-        }
-        body {
-            background: radial-gradient(circle at center, #0f0c29, #302b63, #24243e);
-            color: white;
-        }
-        .weather-icon {
-            filter: drop-shadow(0 0 10px var(--neon-blue));
-            font-size: 2rem;
-        }
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-        .neon-text {
-            text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
-        }
-        .spinner {
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="font-['Inter'] bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 min-h-screen transition-colors duration-300">
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
+<body>
+    <div class="container">
+        <!-- Weather Effects -->
+        <div class="sun"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        
         <!-- Header -->
-        <header class="flex justify-between items-center mb-12">
-            <h1 class="text-4xl font-bold neon-text uppercase tracking-wider">Weather<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">OS</span></h1>
-            <button id="theme-toggle" class="p-3 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
-                <svg id="theme-icon" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-            </button>
-        </header>
-        <!-- Search Section -->
-        <section class="mb-12">
-            <div class="flex flex-col md:flex-row gap-4">
-                <input 
-                    type="text" 
-                    id="city-input" 
-                    placeholder="ENTER CITY NAME..." 
-                    class="flex-grow px-6 py-4 rounded-full glass-card border border-white/20 focus:outline-none focus:border-blue-400 text-white placeholder-gray-300 transition-all duration-300 text-lg uppercase tracking-wider"
-                    aria-label="Enter city name"
-                    list="city-list"
-                >
-                <datalist id="city-list">
-                    <!-- Kenyan Cities/Towns -->
-                    <option value="Nairobi">Nairobi</option>
-                    <option value="Mombasa">Mombasa</option>
-                    <option value="Kisumu">Kisumu</option>
-                    <option value="Nakuru">Nakuru</option>
-                    <option value="Eldoret">Eldoret</option>
-                    <option value="Thika">Thika</option>
-                    <option value="Malindi">Malindi</option>
-                    <option value="Kitale">Kitale</option>
-                    <option value="Kakamega">Kakamega</option>
-                    <option value="Nyeri">Nyeri</option>
-                    <option value="Meru">Meru</option>
-                    <option value="Kisii">Kisii</option>
-                    <option value="Garissa">Garissa</option>
-                    <option value="Wajir">Wajir</option>
-                    <option value="Lamu">Lamu</option>
-                    <option value="Machakos">Machakos</option>
-                    <option value="Narok">Narok</option>
-                    <option value="Bungoma">Bungoma</option>
-                    <option value="Busia">Busia</option>
-                    <option value="Homa Bay">Homa Bay</option>
-                    <option value="Naivasha">Naivasha</option>
-                    <option value="Nanyuki">Nanyuki</option>
-                    <option value="Kericho">Kericho</option>
-                    <option value="Embu">Embu</option>
-                    <option value="Isiolo">Isiolo</option>
-                    <option value="Marsabit">Marsabit</option>
-                    <option value="Voi">Voi</option>
-                    <option value="Kilifi">Kilifi</option>
-                    <option value="Mandera">Mandera</option>
-                    <option value="Lodwar">Lodwar</option>
-                    <option value="Kapenguria">Kapenguria</option>
-                    <option value="Kitui">Kitui</option>
-                    <option value="Nyamira">Nyamira</option>
-                    <option value="Siaya">Siaya</option>
-                    <option value="Migori">Migori</option>
-                    <option value="Bomet">Bomet</option>
-                    <option value="Murang'a">Murang'a</option>
-                    <option value="Kiambu">Kiambu</option>
-                    <option value="Makueni">Makueni</option>
-                    <option value="Taita Taveta">Taita Taveta</option>
-                    <option value="Trans Nzoia">Trans Nzoia</option>
-                    <option value="Uasin Gishu">Uasin Gishu</option>
-                    <option value="Elgeyo Marakwet">Elgeyo Marakwet</option>
-                    <option value="Nandi">Nandi</option>
-                    <option value="Baringo">Baringo</option>
-                    <option value="Laikipia">Laikipia</option>
-                    <option value="Nakuru">Nakuru</option>
-                    <option value="Narok">Narok</option>
-                    <option value="Kajiado">Kajiado</option>
-                    <option value="Kericho">Kericho</option>
-                    <option value="Bomet">Bomet</option>
-                    <option value="Kakamega">Kakamega</option>
-                    <option value="Vihiga">Vihiga</option>
-                    <option value="Bungoma">Bungoma</option>
-                    <option value="Busia">Busia</option>
-                    <option value="Siaya">Siaya</option>
-                    <option value="Kisumu">Kisumu</option>
-                    <option value="Homa Bay">Homa Bay</option>
-                    <option value="Migori">Migori</option>
-                    <option value="Kisii">Kisii</option>
-                    <option value="Nyamira">Nyamira</option>
-                    <option value="Nairobi">Nairobi</option>
-                    <option value="Kiambu">Kiambu</option>
-                    <option value="Murang'a">Murang'a</option>
-                    <option value="Nyeri">Nyeri</option>
-                    <option value="Kirinyaga">Kirinyaga</option>
-                    <option value="Nyandarua">Nyandarua</option>
-                    <option value="Meru">Meru</option>
-                    <option value="Tharaka Nithi">Tharaka Nithi</option>
-                    <option value="Embu">Embu</option>
-                    <option value="Kitui">Kitui</option>
-                    <option value="Machakos">Machakos</option>
-                    <option value="Makueni">Makueni</option>
-                    <option value="Tana River">Tana River</option>
-                    <option value="Garissa">Garissa</option>
-                    <option value="Wajir">Wajir</option>
-                    <option value="Mandera">Mandera</option>
-                    <option value="Marsabit">Marsabit</option>
-                    <option value="Isiolo">Isiolo</option>
-                    <option value="Lamu">Lamu</option>
-                    <option value="Kilifi">Kilifi</option>
-                    <option value="Taita Taveta">Taita Taveta</option>
-                    <option value="Kwale">Kwale</option>
-                    <option value="Mombasa">Mombasa</option>
-                    <option value="Turkana">Turkana</option>
-                    <option value="West Pokot">West Pokot</option>
-                    <option value="Samburu">Samburu</option>
-                    <option value="Trans Nzoia">Trans Nzoia</option>
-                    <option value="Uasin Gishu">Uasin Gishu</option>
-                    <option value="Elgeyo Marakwet">Elgeyo Marakwet</option>
-                    <option value="Nandi">Nandi</option>
-                    <option value="Baringo">Baringo</option>
-                    <option value="Laikipia">Laikipia</option>
-                    <option value="Nakuru">Nakuru</option>
-                    <option value="Narok">Narok</option>
-                    <option value="Kajiado">Kajiado</option>
-                    <!-- Major World Cities -->
-                    <option value="New York">New York</option>
-                    <option value="London">London</option>
-                    <option value="Tokyo">Tokyo</option>
-                    <option value="Paris">Paris</option>
-                    <option value="Dubai">Dubai</option>
-                    <option value="Singapore">Singapore</option>
-                    <option value="Shanghai">Shanghai</option>
-                    <option value="Hong Kong">Hong Kong</option>
-                    <option value="Los Angeles">Los Angeles</option>
-                    <option value="Chicago">Chicago</option>
-                    <option value="Toronto">Toronto</option>
-                    <option value="Sydney">Sydney</option>
-                    <option value="Melbourne">Melbourne</option>
-                    <option value="Berlin">Berlin</option>
-                    <option value="Rome">Rome</option>
-                    <option value="Madrid">Madrid</option>
-                    <option value="Moscow">Moscow</option>
-                    <option value="Seoul">Seoul</option>
-                    <option value="Beijing">Beijing</option>
-                    <option value="Bangkok">Bangkok</option>
-                    <option value="Mumbai">Mumbai</option>
-                    <option value="Delhi">Delhi</option>
-                    <option value="Johannesburg">Johannesburg</option>
-                    <option value="Cairo">Cairo</option>
-                    <option value="Rio de Janeiro">Rio de Janeiro</option>
-                    <option value="São Paulo">São Paulo</option>
-                    <option value="Mexico City">Mexico City</option>
-                    <option value="Buenos Aires">Buenos Aires</option>
-                </datalist>
-                <button 
-                    id="search-btn" 
-                    class="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white font-bold rounded-full transition-all duration-300 flex items-center justify-center gap-3 hover:scale-105 uppercase tracking-wider shadow-lg"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    Search
+        <header>
+            <div class="logo">
+                <i class="fas fa-cloud-sun"></i>
+                <h1>WeatherOS</h1>
+            </div>
+            <div class="controls">
+                <button class="control-btn" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="control-btn" id="location-btn">
+                    <i class="fas fa-location-arrow"></i>
                 </button>
             </div>
-            <div id="error-message" class="mt-2 text-red-500 font-medium hidden"></div>
-        </section>
-        <!-- Loading Spinner -->
-        <div id="loading-spinner" class="flex flex-col justify-center items-center my-16 hidden">
-            <div class="spinner w-16 h-16 border-4 border-transparent border-t-blue-400 border-r-purple-500 rounded-full mb-4"></div>
-            <p class="text-blue-300 uppercase tracking-wider font-mono">SYNCING WITH SATELLITE...</p>
+        </header>
+        
+        <!-- Current Weather Highlights -->
+        <div class="glass-card">
+            <div class="current-highlights">
+                <div class="location-info">
+                    <h2>Current Location</h2>
+                    <div class="location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="current-location">Nairobi, Kenya</span>
+                    </div>
+                </div>
+                <div class="temp-display">
+                    <div class="temp">24°C</div>
+                    <div class="desc">Partly Cloudy</div>
+                </div>
+            </div>
+            
+            <div class="weather-stats">
+                <div class="stat-card">
+                    <div class="label">High</div>
+                    <div class="value">27°</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Low</div>
+                    <div class="value">19°</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Humidity</div>
+                    <div class="value">65%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Wind</div>
+                    <div class="value">12 km/h</div>
+                </div>
+            </div>
         </div>
-        <!-- Current Weather -->
-        <section id="current-weather" class="hidden mb-12 fade-in">
-            <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Current Weather</h2>
-            <div class="glass-card overflow-hidden transition-all duration-500 hover:scale-[1.02] border-b-4 border-blue-400/50">
-                <div class="p-8">
-                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                        <div class="flex items-center gap-4">
-                            <div id="current-icon" class="weather-icon w-20 h-20"></div>
-                            <div>
-                                <h3 id="current-city" class="text-2xl font-bold text-gray-800 dark:text-white"></h3>
-                                <p id="current-description" class="text-gray-600 dark:text-gray-300 capitalize"></p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="text-center">
-                                <span id="current-temp" class="text-5xl font-bold text-gray-800 dark:text-white"></span>
-                                <button id="toggle-unit" class="ml-2 px-2 py-1 bg-blue-100 dark:bg-gray-600 text-blue-800 dark:text-blue-200 rounded-md text-sm hover:bg-blue-200 dark:hover:bg-gray-500 transition-colors">
-                                    °C / °F
-                                </button>
-                            </div>
-                            <div class="hidden md:block">
-                                <div class="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
-                                    </svg>
-                                    <span id="current-humidity"></span>
-                                </div>
-                                <div class="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 12h1v3h3v1h-3v3h-1v-3h-3v-1h3v-3z" />
-                                    </svg>
-                                    <span id="current-wind"></span>
-                                </div>
-                            </div>
-                        </div>
+        
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-input">
+                <input type="text" id="city-input" placeholder="Search for a city...">
+                <i class="fas fa-search"></i>
+            </div>
+            <button class="search-btn" id="search-btn">
+                <i class="fas fa-search"></i>
+                Search
+            </button>
+        </div>
+        
+        <!-- Weather Alert -->
+        <div class="weather-alert">
+            <div class="alert-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="alert-content">
+                <h3>Weather Alert</h3>
+                <p>High UV index today. Remember to use sun protection if going outside.</p>
+            </div>
+        </div>
+        
+        <!-- Current Weather Details -->
+        <div class="glass-card">
+            <div class="current-weather">
+                <div class="weather-icon-container">
+                    <div class="weather-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <div class="weather-info">
+                        <h3>Nairobi, Kenya</h3>
+                        <p>Partly Cloudy</p>
                     </div>
                 </div>
-                <div class="bg-blue-50 dark:bg-gray-800 px-6 py-4 grid grid-cols-3 gap-4 text-center">
-                    <div>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Feels Like</p>
-                        <p id="current-feels-like" class="font-medium text-gray-800 dark:text-white"></p>
+                
+                <div class="temp-display-large">
+                    <div class="temp">24°C</div>
+                    <button class="unit-toggle" id="toggle-unit">°C / °F</button>
+                </div>
+            </div>
+            
+            <div class="weather-details">
+                <div class="detail-card">
+                    <i class="fas fa-temperature-high"></i>
+                    <div class="detail-info">
+                        <h4>Feels Like</h4>
+                        <p>26°C</p>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Humidity</p>
-                        <p id="current-humidity-mobile" class="font-medium text-gray-800 dark:text-white"></p>
+                </div>
+                <div class="detail-card">
+                    <i class="fas fa-tint"></i>
+                    <div class="detail-info">
+                        <h4>Humidity</h4>
+                        <p>65%</p>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Wind</p>
-                        <p id="current-wind-mobile" class="font-medium text-gray-800 dark:text-white"></p>
+                </div>
+                <div class="detail-card">
+                    <i class="fas fa-wind"></i>
+                    <div class="detail-info">
+                        <h4>Wind</h4>
+                        <p>12 km/h</p>
+                    </div>
+                </div>
+                <div class="detail-card">
+                    <i class="fas fa-compress"></i>
+                    <div class="detail-info">
+                        <h4>Pressure</h4>
+                        <p>1015 hPa</p>
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- Forecast Section -->
-        <section id="forecast" class="hidden fade-in">
-            <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">5-Day Forecast</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-                <!-- Forecast cards will be inserted here by JavaScript -->
+        </div>
+        
+        <!-- Hourly Forecast -->
+        <div class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-clock"></i>
+                Hourly Forecast
+            </h2>
+            
+            <div class="hourly-forecast">
+                <div class="hourly-item">
+                    <div class="time">Now</div>
+                    <div class="icon"><i class="fas fa-cloud-sun"></i></div>
+                    <div class="temp">24°</div>
+                </div>
+                <div class="hourly-item">
+                    <div class="time">2 PM</div>
+                    <div class="icon"><i class="fas fa-sun"></i></div>
+                    <div class="temp">26°</div>
+                </div>
+                <div class="hourly-item">
+                    <div class="time">4 PM</div>
+                    <div class="icon"><i class="fas fa-sun"></i></div>
+                    <div class="temp">25°</div>
+                </div>
+                <div class="hourly-item">
+                    <div class="time">6 PM</div>
+                    <div class="icon"><i class="fas fa-cloud-sun"></i></div>
+                    <div class="temp">23°</div>
+                </div>
+                <div class="hourly-item">
+                    <div class="time">8 PM</div>
+                    <div class="icon"><i class="fas fa-cloud"></i></div>
+                    <div class="temp">21°</div>
+                </div>
+                <div class="hourly-item">
+                    <div class="time">10 PM</div>
+                    <div class="icon"><i class="fas fa-cloud"></i></div>
+                    <div class="temp">20°</div>
+                </div>
+                <div class="hourly-item">
+                    <div class="time">12 AM</div>
+                    <div class="icon"><i class="fas fa-cloud"></i></div>
+                    <div class="temp">19°</div>
+                </div>
+                <div class="hourly-item">
+                    <div class="time">2 AM</div>
+                    <div class="icon"><i class="fas fa-cloud"></i></div>
+                    <div class="temp">18°</div>
+                </div>
             </div>
-        </section>
-        <!-- Default Message -->
-        <section id="default-message" class="text-center py-16">
-            <div class="max-w-md mx-auto">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-blue-400 dark:text-blue-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
-                </svg>
-                <h3 class="text-xl font-medium text-gray-700 dark:text-gray-300 mb-2">Search for a city</h3>
-                <p class="text-gray-500 dark:text-gray-400">Enter a city name above to see current weather and forecast</p>
+        </div>
+        
+        <!-- Daily Forecast -->
+        <div class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-calendar-day"></i>
+                5-Day Forecast
+            </h2>
+            
+            <div class="daily-forecast">
+                <div class="daily-item">
+                    <div class="day">Today</div>
+                    <div class="date">Jun 15</div>
+                    <div class="icon"><i class="fas fa-cloud-sun"></i></div>
+                    <div class="desc">Partly Cloudy</div>
+                    <div class="temps">
+                        <span class="high">27°</span>
+                        <span class="low">19°</span>
+                    </div>
+                </div>
+                <div class="daily-item">
+                    <div class="day">Saturday</div>
+                    <div class="date">Jun 16</div>
+                    <div class="icon"><i class="fas fa-sun"></i></div>
+                    <div class="desc">Sunny</div>
+                    <div class="temps">
+                        <span class="high">29°</span>
+                        <span class="low">20°</span>
+                    </div>
+                </div>
+                <div class="daily-item">
+                    <div class="day">Sunday</div>
+                    <div class="date">Jun 17</div>
+                    <div class="icon"><i class="fas fa-cloud-showers-heavy"></i></div>
+                    <div class="desc">Rain Showers</div>
+                    <div class="temps">
+                        <span class="high">23°</span>
+                        <span class="low">18°</span>
+                    </div>
+                </div>
+                <div class="daily-item">
+                    <div class="day">Monday</div>
+                    <div class="date">Jun 18</div>
+                    <div class="icon"><i class="fas fa-cloud-sun"></i></div>
+                    <div class="desc">Partly Cloudy</div>
+                    <div class="temps">
+                        <span class="high">25°</span>
+                        <span class="low">19°</span>
+                    </div>
+                </div>
+                <div class="daily-item">
+                    <div class="day">Tuesday</div>
+                    <div class="date">Jun 19</div>
+                    <div class="icon"><i class="fas fa-sun"></i></div>
+                    <div class="desc">Sunny</div>
+                    <div class="temps">
+                        <span class="high">28°</span>
+                        <span class="low">21°</span>
+                    </div>
+                </div>
             </div>
-        </section>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>WeatherOS &copy; 2023 | Real-time Weather Forecast</p>
+        </div>
     </div>
 
-    <script>
-        // Theme Toggle
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-        const html = document.documentElement;
-
-        const savedTheme = localStorage.getItem('theme') || 
-                          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        html.classList.add(savedTheme);
-
-        function updateThemeIcon(theme) {
-            if (theme === 'dark') {
-                themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.002 9.002 0 0012 21a9.002 9.002 0 008.354-5.646z" />';
-            } else {
-                themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />';
-            }
-        }
-
-        themeToggle.addEventListener('click', () => {
-            html.classList.toggle('dark');
-            const theme = html.classList.contains('dark') ? 'dark' : 'light';
-            localStorage.setItem('theme', theme);
-            updateThemeIcon(theme);
-        });
-
-        updateThemeIcon(savedTheme);
-
-        // City-to-Country Mapping (Key Part Added)
-        const cityCountryMap = {
-            // Kenyan Cities
-            "Nairobi": "Kenya",
-            "Mombasa": "Kenya",
-            "Kisumu": "Kenya",
-            "Nakuru": "Kenya",
-            "Eldoret": "Kenya",
-            "Thika": "Kenya",
-            "Malindi": "Kenya",
-            "Kitale": "Kenya",
-            "Kakamega": "Kenya",
-            "Nyeri": "Kenya",
-            "Meru": "Kenya",
-            "Kisii": "Kenya",
-            "Garissa": "Kenya",
-            "Wajir": "Kenya",
-            "Lamu": "Kenya",
-            "Machakos": "Kenya",
-            "Narok": "Kenya",
-            "Bungoma": "Kenya",
-            "Busia": "Kenya",
-            "Homa Bay": "Kenya",
-            "Naivasha": "Kenya",
-            "Nanyuki": "Kenya",
-            "Kericho": "Kenya",
-            "Embu": "Kenya",
-            "Isiolo": "Kenya",
-            "Marsabit": "Kenya",
-            "Voi": "Kenya",
-            "Kilifi": "Kenya",
-            "Mandera": "Kenya",
-            "Lodwar": "Kenya",
-            "Kapenguria": "Kenya",
-            "Kitui": "Kenya",
-            "Nyamira": "Kenya",
-            "Siaya": "Kenya",
-            "Migori": "Kenya",
-            "Bomet": "Kenya",
-            "Murang'a": "Kenya",
-            "Kiambu": "Kenya",
-            "Makueni": "Kenya",
-            "Taita Taveta": "Kenya",
-
-            // World Cities
-            "New York": "USA",
-            "London": "UK",
-            "Tokyo": "Japan",
-            "Paris": "France",
-            "Dubai": "UAE",
-            "Singapore": "Singapore",
-            "Shanghai": "China",
-            "Hong Kong": "China",
-            "Los Angeles": "USA",
-            "Chicago": "USA",
-            "Toronto": "Canada",
-            "Sydney": "Australia",
-            "Melbourne": "Australia",
-            "Berlin": "Germany",
-            "Rome": "Italy",
-            "Madrid": "Spain",
-            "Moscow": "Russia",
-            "Seoul": "South Korea",
-            "Beijing": "China",
-            "Bangkok": "Thailand",
-            "Mumbai": "India",
-            "Delhi": "India",
-            "Johannesburg": "South Africa",
-            "Cairo": "Egypt",
-            "Rio de Janeiro": "Brazil",
-            "São Paulo": "Brazil",
-            "Mexico City": "Mexico",
-            "Buenos Aires": "Argentina"
-        };
-
-        // Elements
-        const cityInput = document.getElementById('city-input');
-        const searchBtn = document.getElementById('search-btn');
-        const errorMessage = document.getElementById('error-message');
-        const loadingSpinner = document.getElementById('loading-spinner');
-        const currentWeather = document.getElementById('current-weather');
-        const forecast = document.getElementById('forecast');
-        const defaultMessage = document.getElementById('default-message');
-        const toggleUnit = document.getElementById('toggle-unit');
-        let isCelsius = true;
-
-        // Generate mock weather data based on city name
-        function generateMockWeatherData(city) {
-            const cityHash = Array.from(city).reduce((hash, char) => {
-                return char.charCodeAt(0) + (hash << 6) + (hash << 16) - hash;
-            }, 0);
-
-            const baseTemp = 15 + Math.abs(cityHash % 15);
-            const variation = Math.sin(Date.now() / 1000000) * 5;
-            const currentTemp = Math.round(baseTemp + variation);
-
-            const conditions = [
-                {desc: "Sunny", icon: "clear-day"},
-                {desc: "Partly cloudy", icon: "partly-cloudy-day"},
-                {desc: "Cloudy", icon: "cloudy"},
-                {desc: "Rain", icon: "rain"},
-                {desc: "Thunderstorm", icon: "thunderstorm"}
-            ];
-            const condition = conditions[Math.abs(cityHash % conditions.length)];
-
-            const forecastDays = [];
-            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            const today = new Date().getDay();
-            for (let i = 1; i <= 5; i++) {
-                const dayIndex = (today + i) % 7;
-                const dayVariation = Math.sin(cityHash + i) * 3;
-                const dayTemp = Math.round(baseTemp + dayVariation);
-                forecastDays.push({
-                    day: days[dayIndex],
-                    temp_max: dayTemp + 2,
-                    temp_min: dayTemp - 2,
-                    description: conditions[(cityHash + i) % conditions.length].desc,
-                    icon: conditions[(cityHash + i) % conditions.length].icon
-                });
-            }
-
-            return {
-                city: city,
-                country: cityCountryMap[city] || "World",  // ← Dynamic country here
-                current: {
-                    temp: currentTemp,
-                    feels_like: currentTemp + 2,
-                    humidity: 40 + Math.abs(cityHash % 40),
-                    wind: 5 + Math.abs(cityHash % 15),
-                    description: condition.desc,
-                    icon: condition.icon
-                },
-                forecast: forecastDays
-            };
-        }
-
-        // Weather icons mapping
-        const weatherIcons = {
-            "clear-day": "☀️",
-            "clear-night": "🌙",
-            "rain": "🌧️",
-            "snow": "❄️",
-            "sleet": "🌨️",
-            "wind": "🌬️",
-            "fog": "🌫️",
-            "cloudy": "☁️",
-            "partly-cloudy-day": "⛅",
-            "partly-cloudy-night": "🌥️",
-            "thunderstorm": "⛈️"
-        };
-
-        // Search functionality
-        searchBtn.addEventListener('click', () => {
-            const city = cityInput.value.trim();
-            if (city) {
-                fetchWeatherData(city);
-            } else {
-                showError("Please enter a city name");
-            }
-        });
-
-        cityInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const city = cityInput.value.trim();
-                if (city) {
-                    fetchWeatherData(city);
-                } else {
-                    showError("Please enter a city name");
-                }
-            }
-        });
-
-        // Temperature unit toggle
-        toggleUnit.addEventListener('click', () => {
-            isCelsius = !isCelsius;
-            updateTemperatureUnits();
-        });
-
-        function updateTemperatureUnits() {
-            const tempElements = document.querySelectorAll('[data-temp]');
-            tempElements.forEach(el => {
-                const tempC = parseFloat(el.dataset.temp);
-                const tempF = celsiusToFahrenheit(tempC);
-                el.textContent = isCelsius ? `${Math.round(tempC)}°C` : `${Math.round(tempF)}°F`;
-            });
-
-            const feelsLikeElements = document.querySelectorAll('[data-feels-like]');
-            feelsLikeElements.forEach(el => {
-                const tempC = parseFloat(el.dataset.feelsLike);
-                const tempF = celsiusToFahrenheit(tempC);
-                el.textContent = isCelsius ? `Feels like ${Math.round(tempC)}°C` : `Feels like ${Math.round(tempF)}°F`;
-            });
-
-            const tempRangeElements = document.querySelectorAll('[data-temp-max], [data-temp-min]');
-            tempRangeElements.forEach(el => {
-                const tempC = parseFloat(el.dataset.tempMax || el.dataset.tempMin);
-                const tempF = celsiusToFahrenheit(tempC);
-                if (el.dataset.tempMax) {
-                    el.textContent = isCelsius ? `${Math.round(tempC)}°` : `${Math.round(tempF)}°`;
-                } else {
-                    el.textContent = isCelsius ? `${Math.round(tempC)}°` : `${Math.round(tempF)}°`;
-                }
-            });
-        }
-
-        function celsiusToFahrenheit(c) {
-            return (c * 9/5) + 32;
-        }
-
-        function fetchWeatherData(city) {
-            loadingSpinner.classList.remove('hidden');
-            currentWeather.classList.add('hidden');
-            forecast.classList.add('hidden');
-            defaultMessage.classList.add('hidden');
-            errorMessage.classList.add('hidden');
-
-            setTimeout(() => {
-                if (city.toLowerCase() === "fail") {
-                    showError("City not found. Please try another location.");
-                } else {
-                    const weatherData = generateMockWeatherData(city);
-                    displayWeatherData(weatherData);
-                }
-                loadingSpinner.classList.add('hidden');
-            }, 1000);
-        }
-
-        function displayWeatherData(data) {
-            document.getElementById('current-city').textContent = `${data.city}, ${data.country}`;
-            document.getElementById('current-temp').textContent = `${Math.round(data.current.temp)}°C`;
-            document.getElementById('current-temp').dataset.temp = data.current.temp;
-            document.getElementById('current-feels-like').textContent = `Feels like ${Math.round(data.current.feels_like)}°C`;
-            document.getElementById('current-feels-like').dataset.feelsLike = data.current.feels_like;
-            document.getElementById('current-description').textContent = data.current.description;
-            document.getElementById('current-humidity').textContent = `${data.current.humidity}%`;
-            document.getElementById('current-humidity-mobile').textContent = `${data.current.humidity}%`;
-            document.getElementById('current-wind').textContent = `${data.current.wind} km/h`;
-            document.getElementById('current-wind-mobile').textContent = `${data.current.wind} km/h`;
-
-            const currentIcon = document.getElementById('current-icon');
-            currentIcon.textContent = weatherIcons[data.current.icon] || "☀️";
-
-            const forecastContainer = document.querySelector('#forecast > div');
-            forecastContainer.innerHTML = '';
-            data.forecast.forEach(day => {
-                const forecastCard = document.createElement('div');
-                forecastCard.className = 'bg-white dark:bg-gray-700 rounded-lg shadow p-4 hover:shadow-lg transition-shadow';
-                forecastCard.innerHTML = `
-                    <h4 class="font-medium text-gray-800 dark:text-white mb-2">${day.day}</h4>
-                    <div class="weather-icon text-4xl text-center my-3">${weatherIcons[day.icon] || "☀️"}</div>
-                    <p class="text-gray-600 dark:text-gray-300 text-sm text-center capitalize mb-3">${day.description}</p>
-                    <div class="flex justify-between text-sm">
-                        <span class="text-blue-600 dark:text-blue-400 font-medium" data-temp-max="${day.temp_max}">${Math.round(day.temp_max)}°</span>
-                        <span class="text-gray-500 dark:text-gray-400" data-temp-min="${day.temp_min}">${Math.round(day.temp_min)}°</span>
-                    </div>
-                `;
-                forecastContainer.appendChild(forecastCard);
-            });
-
-            currentWeather.classList.remove('hidden');
-            forecast.classList.remove('hidden');
-            defaultMessage.classList.add('hidden');
-        }
-
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.classList.remove('hidden');
-            loadingSpinner.classList.add('hidden');
-            currentWeather.classList.add('hidden');
-            forecast.classList.add('hidden');
-            defaultMessage.classList.remove('hidden');
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
